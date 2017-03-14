@@ -3,7 +3,7 @@
 import UIKit
 
 let image = UIImage(named: "swwdc.png")
-let pixelData = CGDataProviderCopyData(CGImageGetDataProvider(image!.CGImage))
+let pixelData = image!.cgImage!.dataProvider!.data
 
 
 let strings = ["let", "var", "for", "if", "as", "do", "in", "try",
@@ -22,7 +22,7 @@ let colors = [UIColor(red: 255.0 / 255.0, green: 255.0 / 255.0, blue: 255.0 / 25
 
 
 func shouldWriteChar(pos: CGPoint) -> Bool {
-    let pixel = getPixelColor(pos)
+    let pixel = getPixelColor(pos: pos)
     return pixel.r < 0.1 && pixel.g < 0.1 && pixel.b < 0.1
 }
 
@@ -46,7 +46,7 @@ func getPixelColor(pos: CGPoint) -> (r:CGFloat, g:CGFloat, b:CGFloat, a:CGFloat)
 let size = image!.size
 
 // UIViewを生成
-let view:UIView = UIView(frame: CGRect(origin: CGPointZero, size:size))
+let view:UIView = UIView(frame: CGRect(origin: CGPoint.zero, size:size))
 view.backgroundColor = UIColor(red: 41.0 / 255.0, green: 43.0 / 255.0, blue: 55.0 / 255.0, alpha: 1.0)
 
 // CoreGraphicsで描画する
@@ -59,14 +59,14 @@ var y : CGFloat = 0.0
 while (y < size.height) {
     var x : CGFloat = 0.0
     while (x < size.width) {
-        if shouldWriteChar(CGPointMake(x, y)) {
+        if shouldWriteChar(pos: CGPoint(x:x, y:y)) {
             let word = strings[Int(arc4random_uniform(UInt32(strings.count)))]
             let color = colors[Int(arc4random_uniform(UInt32(colors.count)))]
             let attrString = NSAttributedString(
                 string: word,
                 attributes:[NSForegroundColorAttributeName: color,
                     NSFontAttributeName: font!])
-            attrString.drawAtPoint(CGPointMake(x, y))
+            attrString.draw(at: CGPoint(x:x, y:y))
             
             x = x + attrString.size().width
          } else {
@@ -77,7 +77,7 @@ while (y < size.height) {
 }
 
 // viewのlayerに描画したものをセットする
-view.layer.contents = UIGraphicsGetImageFromCurrentImageContext().CGImage
+view.layer.contents = UIGraphicsGetImageFromCurrentImageContext()?.cgImage
 
 UIGraphicsEndImageContext()
 
