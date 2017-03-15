@@ -3,6 +3,7 @@
 import UIKit
 
 let image = UIImage(named: "swwdc.png")
+
 let pixelData = image!.cgImage!.dataProvider!.data
 
 
@@ -59,14 +60,14 @@ var y : CGFloat = 0.0
 while (y < size.height) {
     var x : CGFloat = 0.0
     while (x < size.width) {
-        if shouldWriteChar(pos: CGPoint(x:x, y:y)) {
+        if shouldWriteChar(pos: CGPoint(x: x, y: y)) {
             let word = strings[Int(arc4random_uniform(UInt32(strings.count)))]
             let color = colors[Int(arc4random_uniform(UInt32(colors.count)))]
             let attrString = NSAttributedString(
                 string: word,
                 attributes:[NSForegroundColorAttributeName: color,
                     NSFontAttributeName: font!])
-            attrString.draw(at: CGPoint(x:x, y:y))
+            attrString.draw(at: CGPoint(x: x, y: y))
             
             x = x + attrString.size().width
          } else {
@@ -82,4 +83,4 @@ view.layer.contents = UIGraphicsGetImageFromCurrentImageContext()?.cgImage
 UIGraphicsEndImageContext()
 
 // PlaygroundのTimelineに表示するためのview
-let preview = view
+let preview = view   
